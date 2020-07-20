@@ -1,0 +1,15 @@
+.list_row_container {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.list_row_title {
+	width: 100%;
+}
+
+.list_row_button {
+	width: 100px;
+}
