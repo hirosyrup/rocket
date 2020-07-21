@@ -3,6 +3,7 @@ $(function(){
 		let listData = {}
 		let isAddMode = false;
 		const dataKey ='rocketData';
+		const tmpKey ='rocketTmpData';
 		
 		$('.add_button').on('click', function() {
 				$('#form_data_id').val('');
@@ -15,14 +16,21 @@ $(function(){
 		
 		$('#action_cancel').on('click', function() {
 				toIdleMode();
+				removeTmpData();
 		});
 		
 		$('#action_save').on('click', function() {
 				save($('#form_data_id').val());
+				removeTmpData();
 		});
 
 		$('#action_delete').on('click', function() {
 				remove($('#form_data_id').val());
+				removeTmpData();
+		});
+		
+		$('#form_title, #form_url, #form_class, #form_regex').on('blur', function() {
+				saveTmpData();
 		});
 
 		function updateListData() {
@@ -59,8 +67,16 @@ $(function(){
 		
 		function initView() {
 			updateList();
-			$('#add_form').hide();
-			$('.action_container').hide();
+			const tmpData = JSON.parse(localStorage.getItem(tmpKey));
+			if (tmpData === null) {
+				toIdleMode();
+			} else {
+				$('#form_title').val(tmpData.title);
+				$('#form_url').val(tmpData.url);
+				$('#form_class').val(tmpData.class);
+				$('#form_regex').val(tmpData.regex);
+				toAddMode(false);
+			}
 		};
 		
 		function toAddMode(isEdit) {
@@ -97,12 +113,7 @@ $(function(){
 			if (edit_id === '') {
 				edit_id = createId();
 			}
-			listData[edit_id] = {
-				'title': $('#form_title').val(),
-				'url': $('#form_url').val(),
-				'class': $('#form_class').val(),
-				'regex': $('#form_regex').val()
-			}
+			listData[edit_id] = currentInputData();
 			localStorage.setItem(dataKey, JSON.stringify(listData));
 			updateList();
 			toIdleMode();
@@ -120,6 +131,23 @@ $(function(){
 		
 		function createId() {
 			return new Date().getTime().toString(16);
+		}
+		
+		function currentInputData() {
+			return {
+				'title': $('#form_title').val(),
+				'url': $('#form_url').val(),
+				'class': $('#form_class').val(),
+				'regex': $('#form_regex').val()
+			};
+		}
+		
+		function saveTmpData() {
+			localStorage.setItem(tmpKey, JSON.stringify(currentInputData()));
+		}
+		
+		function removeTmpData() {
+			localStorage.removeItem(tmpKey);
 		}
 		
 		initView();
