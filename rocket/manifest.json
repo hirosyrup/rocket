@@ -23,11 +23,5 @@
       "js": ["jquery.min.js", "content.js"],
 	  "run_at": "document_end"
     }
-  ],
-  
-  "permissions": [
-    "tabs",
-    "http://*/*",
-    "https://*/*"
   ]
 }
