@@ -8,6 +8,18 @@
   </head>
   <body>
     <div id="link_list"></div>
+	<button class='add_button'>新規追加</button>
+	<div class="action_container">
+			<button class='action_button' id='action_cancel'>キャンセル</button>
+			<button class='action_button' id='action_delete'>削除</button>
+			<button class='action_button' id='action_save'>保存</button>
+	</div>
+	<div id="add_form">
+			<p>title<br><input type="text" id='form_title' class='form_text_field'></p>
+			<p>URL<br><input type="text" id='form_url' class='form_text_field'></p>
+			<p>class<br><input type="text" id='form_class' class='form_text_field'></p>
+			<p>regex<br><input type="text" id='form_regex' class='form_text_field'></p>
+	</div>
 	<script src="jquery.min.js"></script>
     <script src="popup.js"></script>
   </body>

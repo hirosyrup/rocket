@@ -13,3 +13,23 @@
 .list_row_button {
 	width: 100px;
 }
+
+.add_button {
+	width: 100%;
+	margin-top: 10px;
+}
+
+.action_container {
+	margin-top: 6px;
+	width: 200px;
+	display: flex;
+	justify-content: center;
+}
+
+.action_button {
+	margin: 4px
+}
+
+.form_text_field {
+	width: 95%;
+}
