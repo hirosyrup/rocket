@@ -4,12 +4,6 @@ $(function(){
 		let isAddMode = false;
 		const dataKey ='rocketData';
 		
-		$('#btn').on('click', function() {
-			chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-				chrome.tabs.sendMessage(tabs[0].id, { 'type': 'OPEN_WINDOW', 'url': 'https://google.co.jp' });
-			});
-		});
-		
 		$('.add_button').on('click', function() {
 				$('#form_data_id').val('');
 				$('#form_title').val('');
@@ -42,7 +36,7 @@ $(function(){
 			updateListData();
 			const listHtml = Object.keys(listData).map(k => {
 					const d = listData[k];
-					return `<div class='list_row_container' id=${k}><span class='list_row_title'>${d.title}</span><span class='list_row_button'><button class='btn'>開く</button></span></div><hr>`
+					return `<div class='list_row_container' id=${k}><span class='list_row_title'>${d.title}</span><span class='list_row_button'><button class='open_btn'>開く</button></span></div><hr>`
 			});
 			
 			$('#link_list').html(listHtml.join(''));
@@ -50,9 +44,16 @@ $(function(){
 					if (isAddMode === true) {
 						toIdleMode();
 					} else {
-						const data_id = $(this).parent().attr("id");
+						const data_id = $(this).closest('.list_row_container').attr("id");
 						edit(data_id);
 					}
+			});
+			$('.open_btn').on('click', function() {
+					const data_id = $(this).closest('.list_row_container').attr("id");
+					const data = listData[data_id];
+					chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+							chrome.tabs.sendMessage(tabs[0].id, { 'type': 'OPEN_WINDOW', 'url': data.url, 'class': data.class, 'regex': data.regex });
+					});
 			});
 		};
 		
