@@ -2,6 +2,7 @@ $(function(){
 		
 		let listData = {}
 		let isAddMode = false;
+		const dataKey ='rocketData';
 		
 		$('#btn').on('click', function() {
 			chrome.tabs.query({active: true, currentWindow: true}, tabs => {
@@ -10,6 +11,7 @@ $(function(){
 		});
 		
 		$('.add_button').on('click', function() {
+				$('#form_data_id').val('');
 				$('#form_title').val('');
 				$('#form_url').val('');
 				$('#form_class').val('');
@@ -21,9 +23,15 @@ $(function(){
 				toIdleMode();
 		});
 		
+		$('#action_save').on('click', function() {
+				save($('#form_data_id').val());
+		});
 
 		function updateListData() {
-			listData = {'werwe': {'title': 'google', 'url': 'https://google.co.jp', 'class': 'aaa', 'regex': '\d{4}'}, 'erere': {'title': 'leeap', 'url': 'https://leeap.jp', 'class': 'bbb', 'regex': '\d{5}'}}
+			listData = JSON.parse(localStorage.getItem(dataKey));
+			if (listData == null) {
+				listData = {};
+			}
 		}
 		
 		function updateList() {
@@ -71,11 +79,32 @@ $(function(){
 
 		function edit(data_id) {
 			const data = listData[data_id]
+			$('#form_data_id').val(data_id);
 			$('#form_title').val(data.title);
 			$('#form_url').val(data.url);
 			$('#form_class').val(data.class);
 			$('#form_regex').val(data.regex);
 			toAddMode(true);
+		}
+		
+		function save(data_id) {
+			let edit_id = data_id
+			if (edit_id === '') {
+				edit_id = createId();
+			}
+			listData[edit_id] = {
+				'title': $('#form_title').val(),
+				'url': $('#form_url').val(),
+				'class': $('#form_class').val(),
+				'regex': $('#form_regex').val()
+			}
+			localStorage.setItem(dataKey, JSON.stringify(listData));
+			updateList();
+			toIdleMode();
+		}
+		
+		function createId() {
+			return new Date().getTime().toString(16);
 		}
 		
 		initView();
