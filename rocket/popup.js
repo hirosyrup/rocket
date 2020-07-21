@@ -27,6 +27,10 @@ $(function(){
 				save($('#form_data_id').val());
 		});
 
+		$('#action_delete').on('click', function() {
+				remove($('#form_data_id').val());
+		});
+
 		function updateListData() {
 			listData = JSON.parse(localStorage.getItem(dataKey));
 			if (listData == null) {
@@ -98,6 +102,16 @@ $(function(){
 				'class': $('#form_class').val(),
 				'regex': $('#form_regex').val()
 			}
+			localStorage.setItem(dataKey, JSON.stringify(listData));
+			updateList();
+			toIdleMode();
+		}
+		
+		function remove(data_id) {
+			if (data_id === '') { 
+				return; 
+			}
+			delete listData[data_id];
 			localStorage.setItem(dataKey, JSON.stringify(listData));
 			updateList();
 			toIdleMode();
